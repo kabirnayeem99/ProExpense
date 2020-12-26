@@ -1,8 +1,8 @@
 package com.arduia.backup
 
+import com.arduia.backup.exception.BackupException
 import com.arduia.backup.task.BackupCountResult
 import com.arduia.backup.task.BackupResult
-import com.arduia.backup.task.getDataOrError
 import jxl.Workbook
 import jxl.read.biff.BiffException
 import jxl.write.WritableWorkbook
@@ -12,7 +12,6 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class ExcelBackup private constructor(private val sheets: List<BackupSheet<*>>) {
-
 
     @Throws(IOException::class, SecurityException::class)
     suspend fun export(outputStream: OutputStream): BackupResult<Int> {
@@ -90,6 +89,6 @@ class ExcelBackup private constructor(private val sheets: List<BackupSheet<*>>) 
         fun build(): ExcelBackup {
             return ExcelBackup(sheets)
         }
-
     }
+
 }

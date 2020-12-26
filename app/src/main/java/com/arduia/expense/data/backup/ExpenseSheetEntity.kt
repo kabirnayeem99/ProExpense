@@ -1,22 +1,31 @@
 package com.arduia.expense.data.backup
 
-import com.arduia.backup.BackupSheet
-import com.arduia.backup.BackupSource
 import com.arduia.backup.SheetFieldInfo
 import com.arduia.backup.SheetRow
+import com.arduia.backup.framework.ExportEntity
+import com.arduia.backup.framework.ImportExportEntity
 import com.arduia.expense.backup.schema.table.Field
 import com.arduia.expense.data.local.ExpenseEnt
 import com.arduia.expense.domain.Amount
 import java.math.BigDecimal
 import java.util.*
 
+class ExpenseSheetEntity : ImportExportEntity<ExpenseEnt> {
+    override suspend fun mapToRow(entity: ExpenseEnt): SheetRow {
+        val data = mutableMapOf<String, String>().apply {
+            put(FIELD_NAME, entity.name ?: "")
+            put(FIELD_AMOUNT, entity.amount.getActual().toString())
+            put(FIELD_CATEGORY, entity.category.toString())
+            put(FIELD_NOTE, entity.note ?: "")
+            put(FIELD_DATE, entity.createdDate.toString())
+        }
 
-class ExpenseBackupSheet(override val sheetName: String, source: BackupSource<ExpenseEnt>) :
-    BackupSheet<ExpenseEnt>(source) {
+        return SheetRow.createFromMap(data)
+    }
 
-    override fun getFieldInfo() = ExpenseBackupSheet.getFieldInfo()
+    override fun getFieldInfo() = ExpenseSheetEntity.getFieldInfo()
 
-    override fun mapToEntity(row: SheetRow): ExpenseEnt {
+    override suspend fun mapToEntity(row: SheetRow): ExpenseEnt {
 
         val name = row[FIELD_NAME]
         val amount = BigDecimal(row[FIELD_AMOUNT] ?: "0.0")
@@ -34,21 +43,6 @@ class ExpenseBackupSheet(override val sheetName: String, source: BackupSource<Ex
             modifiedDate = date
         )
     }
-
-    override fun mapToSheetRow(item: ExpenseEnt): SheetRow {
-
-        val data = mutableMapOf<String, String>().apply {
-            put(FIELD_NAME, item.name ?: "")
-            put(FIELD_AMOUNT, item.amount.getActual().toString())
-            put(FIELD_CATEGORY, item.category.toString())
-            put(FIELD_NOTE, item.note ?: "")
-            put(FIELD_DATE, item.createdDate.toString())
-        }
-
-        return SheetRow.createFromMap(data)
-    }
-
-    fun getName() = sheetName
 
     companion object {
 
@@ -75,6 +69,4 @@ class ExpenseBackupSheet(override val sheetName: String, source: BackupSource<Ex
             Field(it.key, it.value)
         }
     }
-
 }
-

@@ -1,5 +1,6 @@
 package com.arduia.backup
 
+import com.arduia.backup.exception.BackupException
 import com.arduia.backup.task.BackupCountResult
 import com.arduia.backup.task.BackupResult
 import jxl.Sheet
@@ -45,9 +46,9 @@ abstract class BackupSheet<Entity>(private val source: BackupSource<Entity>) :
                 sheet.addCell(Label(columnNo, dataRowNo, cellContent))
             }
         }
+
         return BackupCountResult(itemCount)
     }
-
 
     private fun getDataFromSheet(sheet: Sheet): List<Entity> {
 

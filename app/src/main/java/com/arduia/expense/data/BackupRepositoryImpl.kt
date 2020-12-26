@@ -2,7 +2,7 @@ package com.arduia.expense.data
 
 import android.content.Context
 import android.net.Uri
-import com.arduia.backup.BackupException
+import com.arduia.backup.exception.BackupException
 import com.arduia.backup.ExcelBackup
 import com.arduia.expense.data.exception.RepositoryException
 import com.arduia.expense.data.local.BackupDao

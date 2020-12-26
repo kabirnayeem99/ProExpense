@@ -1,4 +1,4 @@
-package com.arduia.backup
+package com.arduia.backup.generator
 
 interface NameGenerator {
     fun generate(): String

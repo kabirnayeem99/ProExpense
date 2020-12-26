@@ -10,7 +10,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
 import java.lang.Exception
 
-class ExpenseBackupSource (private val repo: ExpenseRepository): BackupSource<ExpenseEnt>{
+class ExpenseBackupSource(private val repo: ExpenseRepository) : BackupSource<ExpenseEnt> {
+
     override suspend fun write(item: ExpenseEnt) {
         repo.insertExpense(item)
     }
@@ -20,10 +21,11 @@ class ExpenseBackupSource (private val repo: ExpenseRepository): BackupSource<Ex
     }
 
     override suspend fun readAll(): List<ExpenseEnt> {
-       return repo.getExpenseAllSync().getDataOrError()
+        return repo.getExpenseAllSync().getDataOrError()
     }
 
     override suspend fun totalCountAll(): Int {
         return repo.getExpenseTotalCountSync().getDataOrError()
     }
+
 }
